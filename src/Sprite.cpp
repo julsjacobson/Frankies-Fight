@@ -51,7 +51,7 @@ void Sprite::draw() {
     // draw image centered and add in translation amount
     //
     if (haveImage) {
-        image.draw(width / 2.0 + trans.x, height / 2.0 + trans.y);
+        image.draw(width + trans.x, height / 2.0 + trans.y);
     }
     else {
         // in case no image is supplied, draw something.

@@ -1,6 +1,3 @@
-
-
-
 #include "ofMain.h"
 #include "Emitter.h"
 
@@ -17,6 +14,7 @@ Emitter::Emitter(SpriteSystem *spriteSys) {
     rate = 1;    // sprites/sec
     haveChildImage = false;
     haveImage = false;
+    haveAnimImage = false;
     velocity = ofVec3f(100, 100, 0);
     drawable = true;
     width = 50;
@@ -33,8 +31,11 @@ void Emitter::draw() {
     sys->draw();
     if (drawable) {
 
-        if (haveImage) {
-            image.drawSubsection(trans.x, trans.y, 128, 128, 0, 0);
+        if (haveImage && haveAnimImage) {
+            image.drawSubsection(trans.x + pos.x, trans.y +pos.y, width, height, col*width+hoff, row*height+voff, width, height);
+        }
+        else if (haveImage) {
+            image.draw(-image.getWidth() / 2.0 + trans.x, -image.getHeight() / 2.0 + trans.y);
         }
         else {
             ofSetColor(0, 0, 0);
@@ -44,27 +45,39 @@ void Emitter::draw() {
 
 }
 
-//  Update the Emitter. If it has been started, spawn new sprites with
-//  initial velocity, lifespan, birthtime.
-//
-void Emitter::update() {
-    if (!started) return;
 
-    float time = ofGetElapsedTimeMillis();
-    if ((time - lastSpawned) > (1000.0 / rate)) {
-        // spawn a new sprite
-        Sprite sprite;
-        if (haveChildImage) sprite.setImage(childImage);
-        sprite.velocity = velocity;
-        sprite.lifespan = lifespan;
-        sprite.setPosition(trans);
-        sprite.birthtime = time;
-        sprite.width = childWidth;
-        sprite.height = childHeight;
-        sys->add(sprite);
-        lastSpawned = time;
+void Emitter::update() {
+    
+    // update animated image on emitter (if there is one)
+    //
+    if (bAnimRunning && haveAnimImage) {
+
+        float curTime = ofGetSystemTimeMillis();
+        if ((curTime - lastTimeRec) > 50) {
+            advanceFrame();
+            lastTimeRec = curTime;
+        }
     }
-    sys->update();
+
+    // update sprite emission (if the emitter is "started")
+    //
+    if (started) {
+        float time = ofGetElapsedTimeMillis();
+        if ((time - lastSpawned) > (1000.0 / rate)) {
+            // spawn a new sprite
+            Sprite sprite;
+            if (haveChildImage) sprite.setImage(childImage);
+            sprite.velocity = velocity;
+            sprite.lifespan = lifespan;
+            sprite.setPosition(trans);
+            sprite.birthtime = time;
+            sprite.width = childWidth;
+            sprite.height = childHeight;
+            sys->add(sprite);
+            lastSpawned = time;
+        }
+        sys->update();
+    }
 }
 
 // Start/Stop the emitter.
@@ -96,6 +109,7 @@ void Emitter::setChildImage(ofImage img) {
 
 void Emitter::setImage(ofImage img) {
     image = img;
+    haveImage = true;
 }
 
 void Emitter::setRate(float r) {
@@ -104,4 +118,28 @@ void Emitter::setRate(float r) {
 
 float Emitter::maxDistPerFrame() {
     return  velocity.length() / ofGetFrameRate();
+}
+
+void Emitter::startAnim() {
+    frame = 0;
+    bAnimRunning = true;
+    lastTimeRec = ofGetSystemTimeMillis();
+}
+
+void Emitter::stopAnim() {
+    bAnimRunning = false;
+}
+
+
+void Emitter::advanceFrame() {
+    if (frame == (nframes - 1)) {
+        col = 0;
+        row = 0;
+        frame = 0;  // cycle back to first frame
+    }
+    else {
+        frame++;
+        if (col == ntiles_x - 1) col = 0; else col++;
+        row = frame / ntiles_x;
+    }
 }

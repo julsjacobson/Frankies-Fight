@@ -23,7 +23,13 @@ public:
     void setChildImage(ofImage);
     void setChildSize(float w, float h) { childWidth = w; childHeight = h; }
     void setImage(ofImage);
+    void setAnimImage(bool f) { haveAnimImage = f; }
     void setRate(float);
+    
+    void startAnim();
+    void stopAnim();
+    void advanceFrame();
+    
     float maxDistPerFrame();
     void update();
     SpriteSystem *sys;
@@ -37,6 +43,20 @@ public:
     bool drawable;
     bool haveChildImage;
     bool haveImage;
+    bool haveAnimImage = false;
     float width, height;
     float childWidth, childHeight;
+    
+    glm::vec3 pos;
+    float voff;
+    float hoff;
+    
+    int ntiles_x, ntiles_y;
+    int nframes;
+    int frame = 0;
+    int row = 0;
+    int col = 0;
+    bool bAnimRunning = false;
+
+    float lastTimeRec;
 };

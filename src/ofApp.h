@@ -4,7 +4,6 @@
 #include "ofxGui.h"
 #include "Sprite.h"
 
-
 typedef enum { MoveStop, MoveLeft, MoveRight, MoveUp, MoveDown } MoveDir;
 
 
@@ -19,12 +18,12 @@ class ofApp : public ofBaseApp{
 		void draw();
 		void checkCollisions();
 
-		void keyPressed(int key) {}
-		void keyReleased(int key) {}
-		void mouseMoved(int x, int y) {}
-		void mouseDragged(int x, int y, int button);
+    void keyPressed(int);
+    void keyReleased(int);
+    void mouseMoved(int x, int y);
+    void mouseDragged(int x, int y, int button);
 		void mousePressed(int x, int y, int button);
-		void mouseReleased(int x, int y, int button) {}
+    void mouseReleased(int x, int y, int button);
 		void mouseEntered(int x, int y) {}
 		void mouseExited(int x, int y) {}
 		void windowResized(int w, int h) {}
@@ -54,5 +53,7 @@ class ofApp : public ofBaseApp{
     
     ofImage meow, squirrelImage, woof, squirrelImg, catImg;
     
-    vector<ofImage> frankieAnim;
+    bool bDrag = false;
+    bool inside;
 };
+
