@@ -16,12 +16,23 @@
 
 
 //TODO: Animate emitters
-//TODO: Move squirrel emitter in a sine wave
+//TODO: Move turrent squirrel at random heights for random distribution of sprites
 //TODO: Lose lives and then game over
+//TODO: Fix background scroll glitch
+//TODO: Prologue music to play before start of game
+//
+//
+//GAME PLAY
+//Press space to start
+//Move frankie using mouse and fire using space bar. If frankie is moved using the mouse,
+//direction of emitter is right. If frankie is moved
+//using arrow keys or not being moved at all, emitter direction is determined by mouse click.
+//frankie will not move unless mouse is in the area of the frankie
+//Sound will play during each rate of fire from the frankie
+//
 //--------------------------------------------------------------
 void ofApp::setup(){
     ofSetVerticalSync(true);
-    //ofBackground(0, 0, 0);
     score = 0;
     
     
@@ -29,21 +40,17 @@ void ofApp::setup(){
     //
     gameStartTime = ofGetElapsedTimeMillis();
     
-    // Create and setup emitters  (you can play with parameters
-    // I have another example program that creates a GUI for these
-    // so with that you can get an idea of velocity/rate effects.
-    //
+    // Create and setup emitters
     frankie = new Emitter( new SpriteSystem());
     squirrel = new Emitter(new SpriteSystem());
     cat = new Emitter(new SpriteSystem());
+    squirrel->s = new Sprite();
 
-
-
-
-    
     //initialize background position
     grassPos = glm::vec3(0,0,0);
     grassPos2 = glm::vec3(ofGetWindowWidth(), 0,0);
+    cloudPos = glm::vec3(0,0,0);
+    cloudPos2 = glm::vec3(ofGetWindowWidth(), 0,0);
     
     
     //Load sprite file
@@ -53,71 +60,65 @@ void ofApp::setup(){
         ofLogFatalError("can't load image: images/frankieAnim.png");
         ofExit();
     }
-    frankie->setImage(frankieImg);
-    frankie->setAnimImage(true);
-
-    
-   /* if (!frankie->image.load("images/frankieAnim.png")) {
-        ofLogFatalError("can't load image: images/frankieAnim.png");
-        ofExit();
-    } else {
-        frankie->image.load("images/frankieAnim.png");
-        frankie->haveImage = true;
-        frankie->setAnimImage(true);
-    }*/
     if (!background.load("images/background.png")){
         ofLogFatalError("can't load image: images/background.png");
         ofExit();
     }
-    else if(!grass.load("images/grass.png")) {
+    if (!grass.load("images/grass.png")) {
         ofLogFatalError("can't load image: images/grass.png");
         ofExit();
     }
-    else if(!cloud.load("images/clouds.png")) {
+    if(!cloud.load("images/clouds.png")) {
         ofLogFatalError("can't load image: images/clouds.png");
         ofExit();
     }
-    
-    else {
-        background.load("images/background.png");
-        grass.load("images/grass.png");
-        cloud.load("images/clouds.png");
-    }
-    
     
     //Create image for emitters, check if image is loaded
     if (!meow.load("images/meow.png")) {
         ofLogFatalError("can't load image: images/meow.png");
         ofExit();
     }
-    else if (!woof.load("images/woof.png")) {
+    if (!woof.load("images/woof.png")) {
         ofLogFatalError("can't load image: images/woof.png");
         ofExit();
     }
-    else if (!squirrelImg.load("images/squirrel.png")) {
+    if (!squirrelImg.load("images/squirrel.png")) {
         ofLogFatalError("can't load image: images/squirrel.png");
     }
-    else if (!catImg.load("images/cat.png")) {
+    if (!catImg.load("images/cat.png")) {
         ofLogFatalError("can't load image: images/cat.png");
         ofExit();
     }
-    else{
-        imageLoaded = true;
-        meow.load("images/meow.png");
-        meow.resize(60,20);
-        woof.load("images/woof.png");
-        woof.resize(56,56);
-        catImg.load("images/cat.png");
-        catImg.drawSubsection(500, 500, 128, 128, 0, 0);
-        
-        squirrelImg.load("images/squirrel.png");
+    if (!shoot.load("sounds/woofSound.mp3")) {
+        ofLogFatalError("can't load sound: sounds/woofSound.mp3");
+        ofExit();
     }
+    if (!prologue.load("sounds/prologue.mp3")) {
+        ofLogFatalError("can't load sound: sounds/prologue.mp3");
+        ofExit();
+    }
+    if (!chibiNinja.load("sounds/chibiNinja.mp3")) {
+        ofLogFatalError("can't load sound: sounds/chibiNinja.mp3");
+        ofExit();
+    }
+    shoot.setMultiPlay(true);
+    shoot.setVolume(.3);
+
+    chibiNinja.play();
+    chibiNinja.setLoop(true);
+
     
+
+
+    meow.resize(60,20);
+    woof.resize(56,56);
     
+    frankie->setImage(frankieImg);
+    frankie->setAnimImage(true);
     frankie->setPosition(ofVec3f(10, ofGetWindowHeight()/2, 0));
     frankie->setVelocity(ofVec3f(1000, 0, 0));
     frankie->setRate(0);
-    frankie->setLifespan(1000);
+    frankie->setLifespan(2000);
     frankie->setChildImage(woof);
     frankie->drawable = true;
     frankie->width = 128;
@@ -133,14 +134,25 @@ void ofApp::setup(){
     squirrel->velocity.set(-400, 0, 0);
     squirrel->setLifespan(5000);
     squirrel->setRate(0);
-    squirrel->setChildImage(squirrelImg);
     squirrel->drawable = false;
+    squirrel->setChildImage(squirrelImg);
 
     
+    //TODO:Trying to animate squirrel image using sprite sheet squirrelAnim.png
+    /*
+    squirrel->s.width = 128;
+    squirrel->s.height = 128;
+    squirrel->s.ntiles_x = 3;
+    squirrel->s.ntiles_y = 2;
+    squirrel->s.voff = 0;
+    squirrel->s.hoff = 0;
+    squirrel->s.nframes = 6;
+    squirrel->s.setAnimImage(true);*/
+    
     cat->setPosition(ofVec3f(ofGetWindowWidth() - 10, ofGetWindowHeight()/2, 0));
-    cat->velocity.set(-200,0,0);
+    cat->velocity.set(-300,0,0);
     cat->setLifespan(7000);
-    cat->setRate(.25);
+    cat->setRate(0);
     cat->setChildImage(catImg);
     cat->drawable = false;
     
@@ -163,21 +175,32 @@ void ofApp::update() {
     //When spacebar is pressed, frankie becomes animated
     //Background scrolls and missles fire when space bar is held down
     if (startGame) {
+
+        //Set rate of enemies
         squirrel->setRate(2);
+        cat->setRate(.75);
+        
+        //Set frankie to animate
         frankie->bAnimRunning = true;
         
+        //TODO: Animate sprite
+        squirrel->s->bAnimRunning = true;
+        
+        //Change position of background grass and clouds
         grassPos.x -= 250 * ofGetLastFrameTime();
         grassPos2.x -= (250 * ofGetLastFrameTime()) - ofGetWindowWidth();
-        
         cloudPos.x -= 50 * ofGetLastFrameTime();
         cloudPos2.x -= (50 * ofGetLastFrameTime()) - ofGetWindowWidth();
         
+        //If space bar is pressed, frankie barks
         if (!bFire) frankie->setRate(0);
             else {
                 frankie->setRate(4);
-                //frankieWoof.play();
+                shoot.play();
             }
+        
     }
+    
     
     //If frankie is not being moved with mouse, use mouse click to change direction
     //If the frankie IS being moved with the mouse, use default
@@ -192,23 +215,28 @@ void ofApp::update() {
     // check for collisions between missles and squirrel
     checkCollisions();
 
-    //Squirrel is emitted at random velocities
-    ofVec3f v = squirrel->velocity;
-    squirrel->setVelocity(ofVec3f(v.x,ofRandom(-v.x /2, 0), v.z));
-    squirrel->trans.y = ofGetWindowHeight() * ofRandom(.3, 1);
+    //Squirrel is emitted in a sine wave using curveEval function
+    //TODO: make height of squirrel entrance random
+    squirrel->sys->amplitude = 100;
+    squirrel->sys->cycles = 2;
+    squirrel->sys->yposition = ofGetWindowHeight()*.7;
+    squirrel->sys->bwave = true;
+    for (int i =0; i < squirrel->sys->sprites.size() ; i++) {
+        //squirrel->trans.y = ofGetWindowHeight() * ofRandom(.3, 1);
+        squirrel->sys->sprites[i].xposition -= 5;
+    }
     
     //Cat is emitted at random height in game
-    cat->trans.y = ofGetWindowHeight() * ofRandom(.3, 1);
-    
+    float random = ofRandom(.3 ,1);
+    cat->trans.y = ofGetWindowHeight() * random;
+    if (random > .6) cat->setVelocity(ofVec3f(cat->velocity.x,ofRandom(cat->velocity.x /2, 0), cat->velocity.z));
+    else cat->setVelocity(ofVec3f(cat->velocity.x,ofRandom(-cat->velocity.x /2, 0), cat->velocity.z));
     
     //If run out of lives, game is over
+    //TODO: make lives function
     if (lives == 0) gameOver = true;
-    
-    
 
 }
-
-
 //--------------------------------------------------------------
 //  ofApp::draw() this is where everything gets drawn
 //  you should only put draw code in this method.
@@ -220,7 +248,7 @@ void ofApp::draw(){
 
     //If game has not started, background is still and text is in the middle of the screen
     //Once game has started, animate background
-    //TODO: grass background stops being seamless after awhile
+    //TODO: (bug) grass background stops being seamless after awhile
     if (!startGame) {
         grass.draw(0,0,ofGetWindowWidth(), ofGetWindowHeight());
         cloud.draw(0,0,ofGetWindowWidth(), ofGetWindowHeight());
@@ -257,14 +285,14 @@ void ofApp::draw(){
 //  For each missle check to see which squirrel you hit and remove them
 //
 void ofApp::checkCollisions() {
+//hit.play();
 
     // find the distance at which the two sprites (missles and squirrel) will collide
     // detect a collision when we are within that distance.
     //
     float collisionDist = frankie->childWidth / 2 + squirrel->childWidth / 2;
     float collisionDist2 = frankie->childWidth / 2 + cat->childWidth / 2;
-    
-    float collisionFrankie = frankie->height/2 + squirrel->childWidth/2;
+
 
     // Loop through all the missiles, then remove any squirrel that are within
     // "collisionDist" of the missiles.  the removeNear() function returns the
@@ -272,9 +300,9 @@ void ofApp::checkCollisions() {
     //
     for (int i = 0; i < frankie->sys->sprites.size(); i++) {
         score += squirrel->sys->removeNear(frankie->sys->sprites[i].trans, collisionDist);
-        score += cat->sys->removeNear(frankie->sys->sprites[i].trans, collisionDist2);
+        score += cat->sys->removeNear(frankie->sys->sprites[i].trans - frankie->sys->sprites[i].height, collisionDist2);
     }
-    
+
     
 }
 
@@ -391,3 +419,4 @@ void ofApp::keyReleased(int key) {
         break;
     }
 }
+

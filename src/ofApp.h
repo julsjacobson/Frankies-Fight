@@ -24,12 +24,16 @@ class ofApp : public ofBaseApp{
     void mouseDragged(int x, int y, int button);
 		void mousePressed(int x, int y, int button);
     void mouseReleased(int x, int y, int button);
+    
 		void mouseEntered(int x, int y) {}
 		void mouseExited(int x, int y) {}
 		void windowResized(int w, int h) {}
 		void dragEvent(ofDragInfo dragInfo) {}
 		void gotMessage(ofMessage msg) {}
 		
+    
+   
+    
 		Emitter *squirrel, *frankie, *cat;
 		int score;
     int lives = 5;
@@ -50,10 +54,17 @@ class ofApp : public ofBaseApp{
     glm::vec3 cloudPos;
     glm::vec3 cloudPos2;
     
+    ofSoundPlayer shoot;
+    
+    /*Music: Eric Skiff - Chibi Ninja - Resistor Anthems - Available at http://EricSkiff.com/music */
+    /* Music: Eric Skiff - Prologue - Resistor Anthems - Available at http://EricSkiff.com/music */
+    ofSoundPlayer chibiNinja;
+    ofSoundPlayer prologue; 
     
     ofImage meow, squirrelImage, woof, squirrelImg, catImg;
     
     bool bDrag = false;
     bool inside;
+    float xposition = ofGetWindowWidth(); 
 };
 

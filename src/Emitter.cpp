@@ -103,6 +103,8 @@ void Emitter::setVelocity(ofVec3f v) {
 void Emitter::setChildImage(ofImage img) {
     childImage = img;
     haveChildImage = true;
+    
+
     childWidth = img.getWidth();
     childHeight = img.getHeight();
 }

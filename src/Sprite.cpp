@@ -37,8 +37,6 @@ float Sprite::age() {
 void Sprite::setImage(ofImage img) {
     image = img;
     haveImage = true;
-    width = image.getWidth();
-    height = image.getHeight();
 }
 
 
@@ -50,17 +48,61 @@ void Sprite::draw() {
 
     // draw image centered and add in translation amount
     //
-    if (haveImage) {
-        image.draw(width + trans.x, height / 2.0 + trans.y);
+  
+    if (haveImage && haveAnimImage) {
+        image.drawSubsection(trans.x + pos.x, trans.y +pos.y, width, height, col*width+hoff, row*height+voff, width, height);
+    
+    }
+    else if (haveImage) {
+        image.draw(image.getWidth() / 2.0 + trans.x, image.getHeight() / 2.0 + trans.y);
     }
     else {
-        // in case no image is supplied, draw something.
-        //
-        ofNoFill();
-        ofSetColor(255, 0, 0);
-        ofDrawRectangle(-width / 2.0 + trans.x, -height / 2.0 + trans.y, width, height);
+        ofDrawRectangle(-width / 2 + trans.x, -height / 2 + trans.y, width, height);
+    }
+
+}
+
+void Sprite::startAnim() {
+    frame = 0;
+    bAnimRunning = true;
+    lastTimeRec = ofGetSystemTimeMillis();
+}
+
+void Sprite::stopAnim() {
+    bAnimRunning = false;
+}
+
+
+void Sprite::advanceFrame() {
+    if (frame == (nframes - 1)) {
+        col = 0;
+        row = 0;
+        frame = 0;  // cycle back to first frame
+    }
+    else {
+        frame++;
+        if (col == ntiles_x - 1) col = 0; else col++;
+        row = frame / ntiles_x;
     }
 }
+
+void Sprite::update() {
+    if (bAnimRunning && haveAnimImage) {
+
+        float curTime = ofGetSystemTimeMillis();
+        if ((curTime - lastTimeRec) > 50) {
+            advanceFrame();
+            lastTimeRec = curTime;
+        }
+    }
+    
+
+    
+}
+
+
+
+
 
 //  Add a Sprite to the Sprite System
 //
@@ -79,6 +121,12 @@ void SpriteSystem::remove(int i) {
 // remove all sprites within a given dist of point, return number removed
 //
 int SpriteSystem::removeNear(ofVec3f point, float dist) {
+    if (!hit.load("sounds/hit.wav")) {
+        ofLogFatalError("can't load sound: images/hit.wav");
+        ofExit();
+    }
+    hit.setMultiPlay(true);
+    
     vector<Sprite>::iterator s = sprites.begin();
     vector<Sprite>::iterator tmp;
     int count = 0;
@@ -88,6 +136,7 @@ int SpriteSystem::removeNear(ofVec3f point, float dist) {
         if (v.length() < dist) {
             tmp = sprites.erase(s);
             count++;
+            hit.play();
             s = tmp;
         }
         else s++;
@@ -95,12 +144,32 @@ int SpriteSystem::removeNear(ofVec3f point, float dist) {
     return count;
 }
 
+//Remove sprite that hits frankie return when frankie get hit
+int SpriteSystem::loseALife(ofVec3f point, float dist) {
+    vector<Sprite>::iterator s = sprites.begin();
+    vector<Sprite>::iterator tmp;
+    int count = 0;
+    while (s != sprites.end()) {
+        ofVec3f v = s->trans - point;
+        if (v.length() < dist) {
+            tmp = sprites.erase(s);
+            count++;
+            s = tmp;
+            
+            cout << count << endl; 
+        } else s++;
+    }
+    
+    return count;
+}
 
 //  Update the SpriteSystem by checking which sprites have exceeded their
 //  lifespan (and deleting).  Also the sprite is moved to it's next
 //  location based on velocity and direction.
 //
 void SpriteSystem::update() {
+    
+
 
     if (sprites.size() == 0) return;
     vector<Sprite>::iterator s = sprites.begin();
@@ -120,10 +189,16 @@ void SpriteSystem::update() {
     }
 
     //  Move sprite
-    //
-    for (int i = 0; i < sprites.size(); i++) {
-        sprites[i].trans += sprites[i].velocity / ofGetFrameRate();
-    }
+        for (int i = 0; i < sprites.size(); i++) {
+    
+            
+            if (bwave) {
+                sprites[i].trans = curveEval(sprites[i].xposition, amplitude, cycles, yposition);
+                
+            
+            } else sprites[i].trans += sprites[i].velocity / ofGetFrameRate();
+        }
+    
 }
 
 //  Render all the sprites
@@ -132,4 +207,12 @@ void SpriteSystem::draw() {
     for (int i = 0; i < sprites.size(); i++) {
         sprites[i].draw();
     }
+}
+
+
+glm::vec3 SpriteSystem::curveEval(float x, float scale, float cycles, float yposition)
+{
+    // x is in screen coordinates and his in [0, WindowWidth]
+    float u = (cycles * x * PI) / ofGetWidth();
+    return (glm::vec3(x, -scale *sin(u) + yposition, 0));
 }

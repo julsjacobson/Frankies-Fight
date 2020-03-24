@@ -51,6 +51,9 @@ public:
     float voff;
     float hoff;
     
+    
+    Sprite *s; 
+    
     int ntiles_x, ntiles_y;
     int nframes;
     int frame = 0;
@@ -59,4 +62,5 @@ public:
     bool bAnimRunning = false;
 
     float lastTimeRec;
+    //float xposition = ofGetWindowWidth(); 
 };
