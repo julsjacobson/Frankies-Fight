@@ -9,6 +9,10 @@
 /* Begin PBXBuildFile section */
 		1CD33E884D9E3358252E82A1 /* ofxToggle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 907C5B5E104864A2D3A25745 /* ofxToggle.cpp */; };
 		483908258D00B98B4BE69F07 /* ofxLabel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 78D67A00EB899FAC09430597 /* ofxLabel.cpp */; };
+		5014DA5B2446DCA000EC2A96 /* TransformObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5014DA562446DCA000EC2A96 /* TransformObject.cpp */; };
+		5014DA5C2446DCA000EC2A96 /* ParticleSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5014DA572446DCA000EC2A96 /* ParticleSystem.cpp */; };
+		5014DA5D2446DCA000EC2A96 /* ParticleEmitter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5014DA582446DCA000EC2A96 /* ParticleEmitter.cpp */; };
+		5014DA5E2446DCA000EC2A96 /* Particle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5014DA592446DCA000EC2A96 /* Particle.cpp */; };
 		50C96FD1242410D20001F86C /* Emitter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50C96FCE242410D20001F86C /* Emitter.cpp */; };
 		50C96FD2242410D20001F86C /* Sprite.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50C96FD0242410D20001F86C /* Sprite.cpp */; };
 		5CBB2AB3A60F65431D7B555D /* ofxButton.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C88333E71C9457E441C33474 /* ofxButton.cpp */; };
@@ -44,6 +48,14 @@
 		2834D88A62CD23F3DE2C47D1 /* ofxButton.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = ofxButton.h; path = ../../../addons/ofxGui/src/ofxButton.h; sourceTree = SOURCE_ROOT; };
 		44B351490B620D04E1E7C52D /* ofxInputField.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = ofxInputField.cpp; path = ../../../addons/ofxGui/src/ofxInputField.cpp; sourceTree = SOURCE_ROOT; };
 		489B196944B06ADC2A071076 /* ofxColorPicker.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = ofxColorPicker.h; path = ../../../addons/ofxGui/src/ofxColorPicker.h; sourceTree = SOURCE_ROOT; };
+		5014DA532446DC9F00EC2A96 /* ParticleSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ParticleSystem.h; sourceTree = "<group>"; };
+		5014DA542446DCA000EC2A96 /* Particle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Particle.h; sourceTree = "<group>"; };
+		5014DA552446DCA000EC2A96 /* TransformObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TransformObject.h; sourceTree = "<group>"; };
+		5014DA562446DCA000EC2A96 /* TransformObject.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TransformObject.cpp; sourceTree = "<group>"; };
+		5014DA572446DCA000EC2A96 /* ParticleSystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ParticleSystem.cpp; sourceTree = "<group>"; };
+		5014DA582446DCA000EC2A96 /* ParticleEmitter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ParticleEmitter.cpp; sourceTree = "<group>"; };
+		5014DA592446DCA000EC2A96 /* Particle.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Particle.cpp; sourceTree = "<group>"; };
+		5014DA5A2446DCA000EC2A96 /* ParticleEmitter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ParticleEmitter.h; sourceTree = "<group>"; };
 		50C96FCD242410D20001F86C /* Sprite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Sprite.h; sourceTree = "<group>"; };
 		50C96FCE242410D20001F86C /* Emitter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Emitter.cpp; sourceTree = "<group>"; };
 		50C96FCF242410D20001F86C /* Emitter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Emitter.h; sourceTree = "<group>"; };
@@ -605,6 +617,14 @@
 		E4B69E1C0A3A1BDC003C02F2 /* src */ = {
 			isa = PBXGroup;
 			children = (
+				5014DA592446DCA000EC2A96 /* Particle.cpp */,
+				5014DA542446DCA000EC2A96 /* Particle.h */,
+				5014DA582446DCA000EC2A96 /* ParticleEmitter.cpp */,
+				5014DA5A2446DCA000EC2A96 /* ParticleEmitter.h */,
+				5014DA572446DCA000EC2A96 /* ParticleSystem.cpp */,
+				5014DA532446DC9F00EC2A96 /* ParticleSystem.h */,
+				5014DA562446DCA000EC2A96 /* TransformObject.cpp */,
+				5014DA552446DCA000EC2A96 /* TransformObject.h */,
 				50C96FD52429B3EC0001F86C /* ofMain.h */,
 				50C96FCE242410D20001F86C /* Emitter.cpp */,
 				50C96FCF242410D20001F86C /* Emitter.h */,
@@ -715,6 +735,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5014DA5B2446DCA000EC2A96 /* TransformObject.cpp in Sources */,
+				5014DA5E2446DCA000EC2A96 /* Particle.cpp in Sources */,
 				E4B69E200A3A1BDC003C02F2 /* main.cpp in Sources */,
 				E4B69E210A3A1BDC003C02F2 /* ofApp.cpp in Sources */,
 				856AA354D08AB4B323081444 /* ofxBaseGui.cpp in Sources */,
@@ -726,8 +748,10 @@
 				483908258D00B98B4BE69F07 /* ofxLabel.cpp in Sources */,
 				F285EB3169F1566CA3D93C20 /* ofxPanel.cpp in Sources */,
 				837220E80EB56CD44AD27F2A /* ofxSlider.cpp in Sources */,
+				5014DA5C2446DCA000EC2A96 /* ParticleSystem.cpp in Sources */,
 				B56FE57CC35806596D38118C /* ofxSliderGroup.cpp in Sources */,
 				50C96FD2242410D20001F86C /* Sprite.cpp in Sources */,
+				5014DA5D2446DCA000EC2A96 /* ParticleEmitter.cpp in Sources */,
 				1CD33E884D9E3358252E82A1 /* ofxToggle.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

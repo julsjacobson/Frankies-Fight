@@ -7,6 +7,8 @@
 //  Kevin M. Smith - CS 134 SJSU
 
 #include "ofMain.h"
+#include "ParticleSystem.h"
+#include "ParticleEmitter.h"
 
 // This is a base object that all drawable object inherit from
 // It is possible this will be replaced by ofNode when we move to 3D
@@ -36,6 +38,7 @@ public:
     void setAnimImage(bool f) { haveAnimImage = f; }
     
 
+    int loseALife(ofVec3f point, float dist);
 
     
     
@@ -66,6 +69,9 @@ public:
     
     float xposition = ofGetWindowWidth();
     
+    bool bExplode = false;
+    
+    
     
 };
 
@@ -80,7 +86,7 @@ public:
     
         
     int loseALife(ofVec3f point, float dist);
-    
+
     void draw();
     vector<Sprite> sprites;
 
@@ -92,5 +98,9 @@ public:
 
     bool bwave = false;
     float amplitude, cycles;
-    float yposition; 
+    float yposition;
+    int points; 
+    
+
+ofVec3f lastPos; 
 };

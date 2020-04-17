@@ -3,6 +3,8 @@
 #include "ofMain.h"
 #include "ofxGui.h"
 #include "Sprite.h"
+#include "ParticleSystem.h"
+#include "ParticleEmitter.h"
 
 typedef enum { MoveStop, MoveLeft, MoveRight, MoveUp, MoveDown } MoveDir;
 
@@ -30,15 +32,19 @@ class ofApp : public ofBaseApp{
 		void windowResized(int w, int h) {}
 		void dragEvent(ofDragInfo dragInfo) {}
 		void gotMessage(ofMessage msg) {}
-		
-    
+    //void checkLife();
+    void loseALife(Emitter *e, float dist);
+    void gainALife(Emitter*e, float dist); 
    
-    
+    void explosion(Sprite *s); 
 		Emitter *squirrel, *frankie, *cat;
+    Emitter *mailman, *firehydrant;
+    Emitter *bone; 
 		int score;
+    int level = 1; 
     int lives = 5;
-		float gameStartTime;
-		bool gameOver = false;
+    float gameStartTime;
+    bool gameOver = false;
 		ofVec3f mouseLast;
     bool startGame; 
     bool bFire;
@@ -62,9 +68,24 @@ class ofApp : public ofBaseApp{
     ofSoundPlayer prologue; 
     
     ofImage meow, squirrelImage, woof, squirrelImg, catImg;
+    ofImage mailmanImg, smokeImg;
+    ofImage fireImg;
+    
     
     bool bDrag = false;
     bool inside;
-    float xposition = ofGetWindowWidth(); 
+    float xposition = ofGetWindowWidth();
+    
+
+    ParticleEmitter water;
+    ParticleEmitter mail;
+    
+    ofImage mailImg;
+    ofImage waterImg;
+    ofImage boneImg;
+    
+    ofSoundPlayer lose;
+    ofSoundPlayer pickup; 
 };
+
 

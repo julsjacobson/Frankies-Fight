@@ -145,3 +145,4 @@ void Emitter::advanceFrame() {
         row = frame / ntiles_x;
     }
 }
+

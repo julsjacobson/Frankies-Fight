@@ -30,6 +30,8 @@ public:
     void stopAnim();
     void advanceFrame();
     
+    int loseALife(Sprite sprites, float dist);
+    
     float maxDistPerFrame();
     void update();
     SpriteSystem *sys;
@@ -52,7 +54,8 @@ public:
     float hoff;
     
     
-    Sprite *s; 
+    Sprite *s;
+    vector<Sprite> sp;
     
     int ntiles_x, ntiles_y;
     int nframes;
@@ -60,6 +63,8 @@ public:
     int row = 0;
     int col = 0;
     bool bAnimRunning = false;
+    
+    int lives = 5;
 
     float lastTimeRec;
     //float xposition = ofGetWindowWidth(); 

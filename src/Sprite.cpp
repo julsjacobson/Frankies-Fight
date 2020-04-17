@@ -103,7 +103,6 @@ void Sprite::update() {
 
 
 
-
 //  Add a Sprite to the Sprite System
 //
 void SpriteSystem::add(Sprite s) {
@@ -133,35 +132,27 @@ int SpriteSystem::removeNear(ofVec3f point, float dist) {
 
     while (s != sprites.end()) {
         ofVec3f v = s->trans - point;
+        
+        lastPos = s->trans;
         if (v.length() < dist) {
             tmp = sprites.erase(s);
-            count++;
+            count+= points;
+            
             hit.play();
             s = tmp;
+            
+
         }
-        else s++;
+        else
+        {
+            lastPos = ofVec3f(0,0,0);
+            s++;
+        }
     }
     return count;
 }
 
-//Remove sprite that hits frankie return when frankie get hit
-int SpriteSystem::loseALife(ofVec3f point, float dist) {
-    vector<Sprite>::iterator s = sprites.begin();
-    vector<Sprite>::iterator tmp;
-    int count = 0;
-    while (s != sprites.end()) {
-        ofVec3f v = s->trans - point;
-        if (v.length() < dist) {
-            tmp = sprites.erase(s);
-            count++;
-            s = tmp;
-            
-            cout << count << endl; 
-        } else s++;
-    }
-    
-    return count;
-}
+
 
 //  Update the SpriteSystem by checking which sprites have exceeded their
 //  lifespan (and deleting).  Also the sprite is moved to it's next
